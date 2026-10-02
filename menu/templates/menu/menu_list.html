@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore the menu at Haroon Khan's Fast Food.">
+    <title>Haroon Khan&#8217;s Fast Food</title>
+    <link rel="stylesheet" href="{% static 'menu/css/menu.css' %}">
+</head>
+<body class="menu-page">
+    <header class="site-header">
+        <div class="container nav-wrap">
+            <a class="brand" href="#top" aria-label="Haroon Khan's Fast Food home">Haroon Khan&#8217;s Fast Food</a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="#menu">Menu</a>
+                <a href="#cart">Cart</a>
+                <a href="#checkout">Checkout</a>
+                <a class="nav-cta" href="#menu">Order now</a>
+            </nav>
+        </div>
+
+        <div class="container hero" id="top">
+            <div class="hero-copy">
+                <p class="eyebrow">Freshly prepared · everyday favorites</p>
+                <h1>Comfort food that feels like home.</h1>
+                <p class="intro">
+                    Fresh flavors, generous portions, and quick service for the University of
+                    Technology, Nowshera community.
+                </p>
+                <div class="hero-actions">
+                    <a class="primary-button" href="#menu">Browse menu</a>
+                    <a class="secondary-button" href="#cart">View cart</a>
+                </div>
+                <ul class="hero-meta" aria-label="Restaurant quick facts">
+                    <li>Delivery area: University of Technology, Nowshera and nearby areas</li>
+                    <li>Free delivery within 3 km</li>
+                    <li>WhatsApp: 03305583858</li>
+                </ul>
+            </div>
+
+            <div class="hero-visual" aria-label="Featured dish image">
+                {% with hero_item=food_items.0 %}
+                    {% if hero_item and hero_item.image %}
+                        <img src="{{ hero_item.image.url }}" alt="{{ hero_item.name }}">
+                    {% else %}
+                        <div class="hero-placeholder">
+                            <span>Fresh &amp; hot</span>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </header>
+
+    <main class="container menu-content">
+        <section class="restaurant-panel" aria-label="Restaurant details">
+            <div class="info-grid">
+                <article class="info-card">
+                    <p class="eyebrow small">Delivery</p>
+                    <h3>Local and nearby</h3>
+                    <p>We serve the University of Technology, Nowshera area and nearby locations.</p>
+                </article>
+                <article class="info-card">
+                    <p class="eyebrow small">Hours</p>
+                    <h3>Open daily</h3>
+                    <p>Shop hours: 11:00 AM–11:00 PM. Delivery hours: 12:00 PM–9:00 PM.</p>
+                </article>
+                <article class="info-card">
+                    <p class="eyebrow small">Contact</p>
+                    <h3>Order by WhatsApp</h3>
+                    <p>Call or message 03305583858 for order confirmation and delivery questions.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="menu" aria-labelledby="menu-heading">
+            <div class="section-heading">
+                <p class="eyebrow">What we are serving</p>
+                <h2 id="menu-heading">Our menu</h2>
+                <p>Choose from our selection of freshly prepared favorites.</p>
+            </div>
+
+            <aside class="delivery-policy" aria-labelledby="delivery-policy-heading">
+                <h3 id="delivery-policy-heading">Delivery information</h3>
+                <ul>
+                    <li>We deliver around the University of Technology, Nowshera, and nearby areas.</li>
+                    <li>Delivery is free within 3 km of the restaurant.</li>
+                    <li>Deliveries beyond 3 km require confirmation from the restaurant. No extra fee is shown automatically.</li>
+                    <li>Delivery hours are 12:00 PM&ndash;9:00 PM. Shop hours are 11:00 AM&ndash;11:00 PM.</li>
+                    <li>The estimated 15-minute delivery time is approximate and not guaranteed.</li>
+                </ul>
+            </aside>
+
+            {% if food_items %}
+                <div class="menu-grid">
+                    {% for item in food_items %}
+                        <article
+                            class="menu-card"
+                            data-item-id="{{ item.id }}"
+                            data-item-name="{{ item.name }}"
+                            data-item-price="{{ item.price }}"
+                        >
+                            {% if item.image %}
+                                <div class="menu-card-image">
+                                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                </div>
+                            {% else %}
+                                <div class="menu-card-image image-placeholder" aria-label="Image unavailable placeholder">
+                                    <span>{{ item.category.name }}</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="menu-card-content">
+                                <p class="category">{{ item.category.name }}</p>
+                                <div class="card-title-row">
+                                    <h3>{{ item.name }}</h3>
+                                    <p class="price">Rs. {{ item.price }}</p>
+                                </div>
+
+                                {% if item.description %}
+                                    <p class="description">{{ item.description }}</p>
+                                {% else %}
+                                    <p class="description description-muted">Freshly prepared with care.</p>
+                                {% endif %}
+                                <button class="add-to-cart" type="button">Add to Cart</button>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-menu">
+                    <h3>Our menu is currently empty</h3>
+                    <p>Please check back soon for something delicious.</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <section id="cart" class="cart-section" aria-labelledby="cart-heading">
+            <div class="section-heading">
+                <p class="eyebrow">Your selections</p>
+                <h2 id="cart-heading">Your Cart</h2>
+            </div>
+
+            <div id="cart-content" aria-live="polite"></div>
+        </section>
+
+        <section id="checkout" class="checkout-panel" aria-labelledby="checkout-heading">
+            <div class="section-heading">
+                <p class="eyebrow">Almost there</p>
+                <h2 id="checkout-heading">Checkout</h2>
+                <p>We will confirm your order and delivery details by phone.</p>
+            </div>
+
+            <form id="checkout-form" method="post" action="{% url 'checkout' %}">
+                {% csrf_token %}
+                {% if checkout_form.non_field_errors %}
+                    <div class="form-errors">{{ checkout_form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="checkout-grid">
+                    <div class="form-field">
+                        {{ checkout_form.customer_name.label_tag }}
+                        {{ checkout_form.customer_name }}
+                        {{ checkout_form.customer_name.errors }}
+                    </div>
+                    <div class="form-field">
+                        {{ checkout_form.customer_phone.label_tag }}
+                        {{ checkout_form.customer_phone }}
+                        {{ checkout_form.customer_phone.errors }}
+                    </div>
+                    <div class="form-field form-field-wide">
+                        {{ checkout_form.delivery_address.label_tag }}
+                        {{ checkout_form.delivery_address }}
+                        {{ checkout_form.delivery_address.errors }}
+                    </div>
+                    <div class="form-field">
+                        {{ checkout_form.landmark.label_tag }}
+                        {{ checkout_form.landmark }}
+                        {{ checkout_form.landmark.errors }}
+                    </div>
+                    <div class="form-field">
+                        {{ checkout_form.payment_method.label_tag }}
+                        {{ checkout_form.payment_method }}
+                        {{ checkout_form.payment_method.errors }}
+                    </div>
+                    <div class="form-field">
+                        {{ checkout_form.payment_timing.label_tag }}
+                        {{ checkout_form.payment_timing }}
+                        {{ checkout_form.payment_timing.errors }}
+                    </div>
+                    <div class="form-field form-field-wide">
+                        {{ checkout_form.instructions.label_tag }}
+                        {{ checkout_form.instructions }}
+                        {{ checkout_form.instructions.errors }}
+                    </div>
+                </div>
+
+                {{ checkout_form.cart_data }}
+                {{ checkout_form.cart_data.errors }}
+                <p class="checkout-note">
+                    Free delivery is available within 3 km of the restaurant. Deliveries beyond 3 km
+                    require restaurant confirmation, and no delivery fee is calculated automatically.
+                    Delivery hours are 12:00 PM&ndash;9:00 PM. Orders are accepted for restaurant
+                    confirmation; delivery outside these hours is not automatically rejected.
+                    The approximate 15-minute delivery estimate is not guaranteed. Payment is not
+                    completed online; the restaurant will confirm your order.
+                </p>
+                <button class="submit-order" type="submit">Place Order</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Haroon Khan&#8217;s Fast Food</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'menu/js/cart.js' %}" defer></script>
+</body>
+</html>

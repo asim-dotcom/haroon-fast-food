@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation | Haroon Khan&#8217;s Fast Food</title>
+    <link rel="stylesheet" href="{% static 'menu/css/menu.css' %}">
+</head>
+<body class="confirmation-body">
+    <main class="container confirmation-page">
+        <section class="confirmation-card" aria-labelledby="confirmation-heading">
+            <p class="eyebrow">Thank you</p>
+            <h1 id="confirmation-heading">Order received</h1>
+            <p class="confirmation-intro">
+                Your order has been saved. The restaurant will contact you to confirm the order and delivery estimate.
+            </p>
+
+            <dl class="order-summary">
+                <div>
+                    <dt>Order reference</dt>
+                    <dd>{{ order.reference }}</dd>
+                </div>
+                <div>
+                    <dt>Customer</dt>
+                    <dd>{{ order.customer_name }}</dd>
+                </div>
+                <div>
+                    <dt>Total</dt>
+                    <dd>Rs. {{ order.total }}</dd>
+                </div>
+            </dl>
+
+            <h2>Items</h2>
+            <ul class="confirmation-items">
+                {% for item in order.items.all %}
+                    <li>
+                        <span>{{ item.item_name }} × {{ item.quantity }}</span>
+                        <strong>Rs. {{ item.line_total }}</strong>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <p class="confirmation-note">
+                Delivery is free within 3 km. Deliveries beyond 3 km require restaurant confirmation.
+                The approximate 15-minute estimate is not guaranteed.
+            </p>
+
+            <div class="confirmation-actions">
+                <a
+                    class="whatsapp-button"
+                    href="{{ whatsapp_url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >Send order to WhatsApp</a>
+                <a class="back-to-menu" href="{% url 'menu_list' %}">Back to menu</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        localStorage.removeItem("haroon-fast-food-cart");
+    </script>
+</body>
+</html>

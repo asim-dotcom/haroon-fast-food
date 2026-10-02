@@ -1,0 +1,40 @@
+﻿# Python / Django
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.Python
+*.egg-info/
+
+# Virtual environments
+.env/
+env/
+.venv/
+venv/
+ENV/
+
+# Django / project runtime
+*.log
+*.pot
+*.pyc
+db.sqlite3
+.env
+.env.*
+local_settings.py
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test / temp artifacts
+coverage/
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.tox/
+.tmp/
+.temp/
+*.sqlite3
